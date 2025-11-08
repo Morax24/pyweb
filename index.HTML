@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apa itu Python?</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #2d3748;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+            border: 3px solid #4299e1;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            color: #3776ab;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header .python-icon {
+            font-size: 4em;
+            margin: 20px 0;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 5px solid;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+        }
+
+        .card.blue { border-top-color: #4299e1; }
+        .card.green { border-top-color: #48bb78; }
+        .card.yellow { border-top-color: #ecc94b; }
+        .card.pink { border-top-color: #ed64a6; }
+        .card.purple { border-top-color: #9f7aea; }
+
+        .card-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .card h2 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: #2d3748;
+        }
+
+        .card p {
+            line-height: 1.8;
+            color: #4a5568;
+            margin-bottom: 15px;
+        }
+
+        .card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .card ul li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            color: #4a5568;
+        }
+
+        .card ul li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #3776ab;
+            font-weight: bold;
+        }
+
+        .code-example {
+            background: #1a202c;
+            color: #68d391;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            border-left: 4px solid #3776ab;
+            position: relative;
+        }
+
+        .code-example:before {
+            content: "Python";
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            color: #a0aec0;
+            font-size: 0.8em;
+        }
+
+        .code-example code {
+            display: block;
+            white-space: pre;
+        }
+
+        .keyword { color: #fc6d26; }
+        .string { color: #fbd38d; }
+        .function { color: #68d391; }
+        .comment { color: #718096; }
+
+        .demo-section {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .demo-section h2 {
+            font-size: 2em;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+
+        .demo-box {
+            background: #f7fafc;
+            border: 3px dashed #4299e1;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            color: #2d3748;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 10px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .real-life {
+            background: #edf2f7;
+            border-left: 5px solid #3776ab;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .real-life strong {
+            color: #3776ab;
+            font-size: 1.1em;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #3776ab;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin: 5px;
+        }
+
+        .output {
+            background: #2d3748;
+            color: #68d391;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            border-left: 4px solid #68d391;
+        }
+
+        /* VSCode Style Editor */
+        .vscode-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .vscode-header {
+            background: #2d2d2d;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .vscode-tabs {
+            display: flex;
+            gap: 5px;
+        }
+
+        .vscode-tab {
+            background: #1e1e1e;
+            color: #ccc;
+            padding: 8px 20px;
+            border-radius: 5px 5px 0 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+        }
+
+        .vscode-tab.active {
+            background: #1e1e1e;
+            color: white;
+        }
+
+        .vscode-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .vscode-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .vscode-btn.close { background: #ff5f56; }
+        .vscode-btn.minimize { background: #ffbd2e; }
+        .vscode-btn.maximize { background: #27c93f; }
+
+        .vscode-body {
+            display: flex;
+            background: #1e1e1e;
+        }
+
+        .vscode-sidebar {
+            background: #252526;
+            width: 50px;
+            padding: 10px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            border-right: 1px solid #3e3e42;
+        }
+
+        .sidebar-icon {
+            color: #858585;
+            font-size: 1.3em;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .sidebar-icon:hover {
+            color: white;
+            background: #37373d;
+        }
+
+        .sidebar-icon.active {
+            color: white;
+            border-left: 2px solid #007acc;
+        }
+
+        .vscode-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .editor-wrapper {
+            display: flex;
+            flex: 1;
+        }
+
+        .line-numbers {
+            background: #1e1e1e;
+            color: #858585;
+            padding: 20px 10px;
+            text-align: right;
+            user-select: none;
+            font-size: 0.9em;
+            line-height: 1.6;
+            min-width: 50px;
+            border-right: 1px solid #3e3e42;
+        }
+
+        .code-editor {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            flex: 1;
+            outline: none;
+            border: none;
+            resize: none;
+            overflow-y: auto;
+            min-height: 400px;
+            white-space: pre;
+            overflow-wrap: normal;
+        }
+
+        .vscode-footer {
+            background: #007acc;
+            color: white;
+            padding: 5px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85em;
+        }
+
+        .footer-section {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .run-button {
+            background: #48bb78;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1em;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 15px;
+        }
+
+        .run-button:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(72, 187, 120, 0.4);
+        }
+
+        .run-button:active {
+            transform: translateY(0);
+        }
+
+        .output-panel {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-top: 2px solid #3e3e42;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            min-height: 100px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .output-panel .output-header {
+            color: #858585;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #3e3e42;
+            padding-bottom: 5px;
+        }
+
+        .output-panel .output-content {
+            color: #68d391;
+        }
+
+        .output-panel .output-error {
+            color: #f56565;
+        }
+
+        .examples-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            margin-bottom: 30px;
+        }
+
+        .examples-section h3 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            text-align: center;
+        }
+
+        .example-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .example-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .example-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .vscode-sidebar {
+                width: 40px;
+            }
+
+            .code-editor {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="python-icon">🐍</div>
+            <h1>Apa itu Python?</h1>
+            <p>Python adalah bahasa pemrograman tingkat tinggi yang mudah dipelajari, powerful, dan serbaguna. Dibuat oleh Guido van Rossum pada tahun 1991, Python menjadi salah satu bahasa pemrograman paling populer di dunia!</p>
+            <div style="margin-top: 20px;">
+                <span class="badge">Mudah Dipelajari</span>
+                <span class="badge">Powerful</span>
+                <span class="badge">Serbaguna</span>
+            </div>
+        </div>
+
+        <!-- VSCode Editor - Praktek Langsung! -->
+        <div class="vscode-container">
+            <div class="vscode-header">
+                <div class="vscode-tabs">
+                    <div class="vscode-tab active">
+                        <i class="fab fa-python"></i>
+                        main.py
+                    </div>
+                </div>
+                <div class="vscode-controls">
+                    <div class="vscode-btn close"></div>
+                    <div class="vscode-btn minimize"></div>
+                    <div class="vscode-btn maximize"></div>
+                </div>
+            </div>
+
+            <div class="vscode-body">
+                <div class="vscode-sidebar">
+                    <i class="fas fa-copy sidebar-icon active" title="Explorer"></i>
+                    <i class="fas fa-search sidebar-icon" title="Search"></i>
+                    <i class="fas fa-code-branch sidebar-icon" title="Source Control"></i>
+                    <i class="fas fa-play sidebar-icon" title="Run"></i>
+                    <i class="fas fa-cube sidebar-icon" title="Extensions"></i>
+                </div>
+
+                <div class="vscode-content">
+                    <div class="editor-wrapper">
+                        <div class="line-numbers" id="lineNumbers">1</div>
+                        <textarea class="code-editor" id="codeEditor" spellcheck="false"># Tulis kode Python Anda di sini
+print("Hello, Python!")</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="vscode-footer">
+                <div class="footer-section">
+                    <span><i class="fab fa-python"></i> Python 3.12</span>
+                    <span><i class="fas fa-check-circle"></i> UTF-8</span>
+                </div>
+                <div class="footer-section">
+                    <span>Ln 1, Col 1</span>
+                </div>
+            </div>
+
+            <div style="text-align: center; background: #252526; padding: 10px;">
+                <button class="run-button" onclick="runCode()">
+                    <i class="fas fa-play"></i>
+                    Jalankan Kode (Run)
+                </button>
+            </div>
+
+            <div class="output-panel" id="outputPanel">
+                <div class="output-header">
+                    <i class="fas fa-terminal"></i> OUTPUT:
+                </div>
+                <div class="output-content" id="outputContent">
+                    Klik tombol "Jalankan Kode" untuk melihat hasil...
+                </div>
+            </div>
+        </div>
+
+        <!-- Examples Section -->
+        <div class="examples-section">
+            <h3><i class="fas fa-lightbulb"></i> Contoh Kode Python - Klik untuk Coba Langsung!</h3>
+            <div class="example-buttons">
+                <button class="example-btn" onclick="loadExample('hello')">👋 Hello World</button>
+                <button class="example-btn" onclick="loadExample('variable')">📝 Variabel</button>
+                <button class="example-btn" onclick="loadExample('loop')">🔄 Loop</button>
+                <button class="example-btn" onclick="loadExample('function')">⚡ Function</button>
+                <button class="example-btn" onclick="loadExample('conditional')">❓ If-Else</button>
+                <button class="example-btn" onclick="loadExample('list')">📚 List</button>
+                <button class="example-btn" onclick="loadExample('calculator')">🧮 Kalkulator</button>
+                <button class="example-btn" onclick="loadExample('faktorial')">🔢 Faktorial</button>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="card blue">
+                <div class="card-icon">📖</div>
+                <h2>Apa itu Python?</h2>
+                <p><strong>Python</strong> adalah bahasa pemrograman interpreted, high-level, dan general-purpose yang menekankan pada keterbacaan kode.</p>
+                <p>Python menggunakan indentasi (spasi) untuk mendefinisikan blok kode, bukan kurung kurawal seperti bahasa lain.</p>
+                <div class="real-life">
+                    <strong>🌍 Contoh di Kehidupan Nyata:</strong>
+                    <p>Seperti resep masakan yang ditulis dalam bahasa Indonesia yang mudah dimengerti, bukan dalam bahasa teknis yang rumit. Python membuat coding seperti berbicara dengan komputer menggunakan bahasa yang lebih "manusiawi".</p>
+                </div>
+            </div>
+
+            <div class="card green">
+                <div class="card-icon">🎯</div>
+                <h2>Kegunaan Python</h2>
+                <ul>
+                    <li>Web Development (Django, Flask)</li>
+                    <li>Data Science & Machine Learning</li>
+                    <li>Automation & Scripting</li>
+                    <li>Game Development</li>
+                    <li>Desktop Applications</li>
+                    <li>Artificial Intelligence</li>
+                </ul>
+                <div class="real-life">
+                    <strong>🌍 Contoh Nyata:</strong>
+                    <p>Instagram & Spotify menggunakan Python, Netflix menggunakan Python untuk rekomendasi film, NASA menggunakan Python untuk analisis data!</p>
+                </div>
+            </div>
+
+            <div class="card yellow">
+                <div class="card-icon">⚡</div>
+                <h2>Kenapa Python?</h2>
+                <ul>
+                    <li>Sintaks yang mudah dan sederhana</li>
+                    <li>Library dan framework yang lengkap</li>
+                    <li>Community yang besar dan aktif</li>
+                    <li>Cross-platform (Windows, Mac, Linux)</li>
+                    <li>Gratis dan Open Source</li>
+                    <li>Cocok untuk pemula maupun expert</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="card pink">
+                <div class="card-icon">👋</div>
+                <h2>Contoh: Hello World</h2>
+                <p>Program pertama yang biasa dibuat oleh programmer:</p>
+                <div class="code-example">
+<code><span class="comment"># Program Hello World di Python</span>
+<span class="keyword">print</span>(<span class="string">"Hello, World!"</span>)</code>
+                </div>
+                <div class="output">Output: Hello, World!</div>
+                <p>Sangat simpel! Bandingkan dengan Java yang memerlukan banyak baris kode untuk hal yang sama.</p>
+            </div>
+
+            <div class="card purple">
+                <div class="card-icon">🔢</div>
+                <h2>Contoh: Variabel & Tipe Data</h2>
+                <div class="code-example">
+<code><span class="comment"># Variabel di Python sangat mudah</span>
+nama = <span class="string">"Namamu"</span>
+umur = <span class="string">19</span>
+tinggi = <span class="string">170.5</span>
+adalah_pelajar = <span class="string">True</span>
+
+<span class="keyword">print</span>(<span class="string">f"Nama: {nama}"</span>)
+<span class="keyword">print</span>(<span class="string">f"Umur: {umur} tahun"</span>)
+<span class="keyword">print</span>(<span class="string">f"Tinggi: {tinggi} cm"</span>)</code>
+                </div>
+                <div class="output">Output:<br>Nama: Namamu<br>Umur: 17 tahun<br>Tinggi: 170.5 cm</div>
+            </div>
+
+            <div class="card blue">
+                <div class="card-icon">🔄</div>
+                <h2>Contoh: Looping</h2>
+                <div class="code-example">
+<code><span class="comment"># For loop sederhana</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="string">1</span>, <span class="string">6</span>):
+    <span class="keyword">print</span>(<span class="string">f"Angka {i}"</span>)
+
+<span class="comment"># Loop dengan list</span>
+buah = [<span class="string">"Apel"</span>, <span class="string">"Pisang"</span>, <span class="string">"Jeruk"</span>]
+<span class="keyword">for</span> b <span class="keyword">in</span> buah:
+    <span class="keyword">print</span>(<span class="string">f"Saya suka {b}"</span>)</code>
+                </div>
+            </div>
+
+            <div class="card green">
+                <div class="card-icon">🎲</div>
+                <h2>Contoh: Function</h2>
+                <div class="code-example">
+<code><span class="comment"># Membuat function</span>
+<span class="keyword">def</span> <span class="function">sapa</span>(nama):
+    <span class="keyword">return</span> <span class="string">f"Halo, {nama}!"</span>
+
+<span class="comment"># Menggunakan function</span>
+pesan = <span class="function">sapa</span>(<span class="string">"Namamu"</span>)
+<span class="keyword">print</span>(pesan)
+
+<span class="comment"># Function dengan perhitungan</span>
+<span class="keyword">def</span> <span class="function">luas_persegi</span>(sisi):
+    <span class="keyword">return</span> sisi * sisi
+
+hasil = <span class="function">luas_persegi</span>(<span class="string">5</span>)
+<span class="keyword">print</span>(<span class="string">f"Luas: {hasil}"</span>)</code>
+                </div>
+            </div>
+
+            <div class="card yellow">
+                <div class="card-icon">❓</div>
+                <h2>Contoh: Conditional (If-Else)</h2>
+                <div class="code-example">
+<code><span class="comment"># Pengkondisian sederhana</span>
+nilai = <span class="string">85</span>
+
+<span class="keyword">if</span> nilai >= <span class="string">90</span>:
+    <span class="keyword">print</span>(<span class="string">"Grade: A"</span>)
+<span class="keyword">elif</span> nilai >= <span class="string">80</span>:
+    <span class="keyword">print</span>(<span class="string">"Grade: B"</span>)
+<span class="keyword">elif</span> nilai >= <span class="string">70</span>:
+    <span class="keyword">print</span>(<span class="string">"Grade: C"</span>)
+<span class="keyword">else</span>:
+    <span class="keyword">print</span>(<span class="string">"Grade: D"</span>)</code>
+                </div>
+                <div class="output">Output: Grade: B</div>
+            </div>
+
+            <div class="card pink">
+                <div class="card-icon">📚</div>
+                <h2>Contoh: List & Dictionary</h2>
+                <div class="code-example">
+<code><span class="comment"># List (Array)</span>
+skills = [<span class="string">"HTML"</span>, <span class="string">"CSS"</span>, <span class="string">"JavaScript"</span>, <span class="string">"Python"</span>]
+<span class="keyword">print</span>(skills[<span class="string">0</span>])  <span class="comment"># Output: HTML</span>
+
+<span class="comment"># Dictionary (Key-Value)</span>
+siswa = {
+    <span class="string">"nama"</span>: <span class="string">"Namamu"</span>,
+    <span class="string">"kelas"</span>: <span class="string">"12"</span>,
+    <span class="string">"sekolah"</span>: <span class="string">"SMKN"</span>
+}
+<span class="keyword">print</span>(siswa[<span class="string">"nama"</span>])</code>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>🎯 Demo Interaktif Python</h2>
+            <p>Klik tombol di bawah untuk melihat Python beraksi!</p>
+            
+            <div class="demo-box" id="demoBox">
+                <p>Klik tombol untuk melihat keajaiban Python! 🐍</p>
+            </div>
+
+            <button class="btn" onclick="helloWorld()">👋 Hello World</button>
+            <button class="btn" onclick="hitungLuas()">📐 Hitung Luas</button>
+            <button class="btn" onclick="loopAngka()">🔄 Loop Angka</button>
+            <button class="btn" onclick="acakWarna()">🎨 Acak Warna</button>
+            <button class="btn" onclick="resetDemo()">🔄 Reset</button>
+        </div>
+
+        <div class="card purple" style="text-align: center;">
+            <div class="card-icon">🚀</div>
+            <h2>Mulai Belajar Python!</h2>
+            <p>Python adalah bahasa yang sempurna untuk memulai perjalanan programming Anda. Dengan sintaks yang mudah dan aplikasi yang luas, Python membuka pintu ke berbagai bidang teknologi!</p>
+            <p style="margin-top: 20px; font-size: 1.2em; color: #3776ab;">
+                <strong>"Python is powerful... and fast; plays well with others; runs everywhere; is friendly & easy to learn; is Open."</strong>
+            </p>
+            <p style="margin-top: 10px;">- Python.org</p>
+        </div>
+    </div>
+
+    <script>
+        // VSCode Editor Functions
+        const examples = {
+            hello: `# Program Hello World
+print("Hello, World!")
+print("Selamat datang di Python!")
+print("Python itu mudah! 🐍")`,
+
+            variable: `# Variabel dan Tipe Data
+nama = "Namamu"
+umur = 17
+tinggi = 170.5
+adalah_siswa = True
+
+print(f"Nama: {nama}")
+print(f"Umur: {umur} tahun")
+print(f"Tinggi: {tinggi} cm")
+print(f"Status Siswa: {adalah_siswa}")`,
+
+            loop: `# Loop dengan Python
+print("=== For Loop ===")
+for i in range(1, 6):
+    print(f"Angka {i}")
+
+print("\\n=== Loop List ===")
+buah = ["Apel", "Pisang", "Jeruk", "Mangga"]
+for b in buah:
+    print(f"Saya suka {b}")`,
+
+            function: `# Membuat Function
+def sapa(nama):
+    return f"Halo, {nama}! Selamat datang!"
+
+def luas_persegi(sisi):
+    return sisi * sisi
+
+def luas_lingkaran(jari):
+    pi = 3.14159
+    return pi * jari * jari
+
+# Menggunakan function
+print(sapa("Namamu"))
+print(f"Luas persegi (5x5): {luas_persegi(5)}")
+print(f"Luas lingkaran (r=7): {luas_lingkaran(7):.2f}")`,
+
+            conditional: `# Conditional Statement
+nilai = 85
+
+print("=== Sistem Penilaian ===")
+if nilai >= 90:
+    grade = "A"
+    keterangan = "Excellent!"
+elif nilai >= 80:
+    grade = "B"
+    keterangan = "Good!"
+elif nilai >= 70:
+    grade = "C"
+    keterangan = "Average"
+else:
+    grade = "D"
+    keterangan = "Need Improvement"
+
+print(f"Nilai: {nilai}")
+print(f"Grade: {grade}")
+print(f"Keterangan: {keterangan}")`,
+
+            list: `# List dan Dictionary
+print("=== LIST ===")
+skills = ["HTML", "CSS", "JavaScript", "Python", "Laravel"]
+print(f"Skill pertama: {skills[0]}")
+print(f"Skill terakhir: {skills[-1]}")
+print(f"Total skills: {len(skills)}")
+
+print("\\n=== DICTIONARY ===")
+siswa = {
+    "nama": "Namamu",
+    "kelas": "12",
+    "sekolah": "SMKN",
+    "hobi": ["Coding", "Gaming", "Reading"]
+}
+
+print(f"Nama: {siswa['nama']}")
+print(f"Kelas: {siswa['kelas']}")
+print(f"Hobi: {', '.join(siswa['hobi'])}")`,
+
+            calculator: `# Kalkulator Sederhana
+def kalkulator(a, b, operasi):
+    if operasi == "+":
+        return a + b
+    elif operasi == "-":
+        return a - b
+    elif operasi == "*":
+        return a * b
+    elif operasi == "/":
+        return a / b if b != 0 else "Error: Tidak bisa dibagi 0"
+    else:
+        return "Operasi tidak valid"
+
+# Contoh penggunaan
+print("=== KALKULATOR PYTHON ===")
+print(f"10 + 5 = {kalkulator(10, 5, '+')}")
+print(f"10 - 5 = {kalkulator(10, 5, '-')}")
+print(f"10 * 5 = {kalkulator(10, 5, '*')}")
+print(f"10 / 5 = {kalkulator(10, 5, '/')}")`,
+
+            faktorial: `# Menghitung Faktorial
+def faktorial(n):
+    if n == 0 or n == 1:
+        return 1
+    else:
+        return n * faktorial(n - 1)
+
+print("=== FAKTORIAL ===")
+for i in range(1, 6):
+    hasil = faktorial(i)
+    print(f"{i}! = {hasil}")
+
+# Contoh lain
+angka = 7
+print(f"\\n{angka}! = {faktorial(angka)}")`
+        };
+
+        function loadExample(exampleName) {
+            const editor = document.getElementById('codeEditor');
+            editor.value = examples[exampleName];
+            updateLineNumbers();
+            document.getElementById('outputContent').textContent = 'Klik tombol "Jalankan Kode" untuk melihat hasil...';
+            document.getElementById('outputContent').className = 'output-content';
+            editor.focus();
+            
+            // Scroll ke editor
+            editor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function updateLineNumbers() {
+            const editor = document.getElementById('codeEditor');
+            const lineNumbers = document.getElementById('lineNumbers');
+            const lines = editor.value.split('\n').length;
+            lineNumbers.textContent = Array.from({length: lines}, (_, i) => i + 1).join('\n');
+        }
+
+        document.getElementById('codeEditor').addEventListener('input', updateLineNumbers);
+        document.getElementById('codeEditor').addEventListener('scroll', function() {
+            document.getElementById('lineNumbers').scrollTop = this.scrollTop;
+        });
+
+        function runCode() {
+            const code = document.getElementById('codeEditor').value;
+            const outputContent = document.getElementById('outputContent');
+            
+            outputContent.innerHTML = '';
+            outputContent.className = 'output-content';
+            
+            try {
+                const lines = code.split('\n');
+                let output = [];
+                let variables = {};
+                
+                // Simple Python interpreter simulation
+                for (let line of lines) {
+                    line = line.trim();
+                    
+                    // Skip comments and empty lines
+                    if (line.startsWith('#') || line === '') {
+                        continue;
+                    }
+                    
+                    // Handle variable assignments
+                    if (line.includes('=') && !line.includes('==') && !line.includes('>=') && !line.includes('<=')) {
+                        const parts = line.split('=');
+                        if (parts.length === 2 && !line.startsWith('print')) {
+                            const varName = parts[0].trim();
+                            let varValue = parts[1].trim();
+                            
+                            // Remove quotes from strings
+                            if ((varValue.startsWith('"') && varValue.endsWith('"')) || 
+                                (varValue.startsWith("'") && varValue.endsWith("'"))) {
+                                varValue = varValue.slice(1, -1);
+                            }
+                            
+                            variables[varName] = varValue;
+                            continue;
+                        }
+                    }
+                    
+                    // Handle print statements
+                    if (line.startsWith('print(')) {
+                        let content = line.match(/print\((.*)\)/);
+                        if (content && content[1]) {
+                            let printContent = content[1];
+                            
+                            // Remove quotes
+                            printContent = printContent.replace(/^["']|["']$/g, '');
+                            
+                            // Handle escape sequences
+                            printContent = printContent.replace(/\\n/g, '\n');
+                            printContent = printContent.replace(/\\t/g, '\t');
+                            
+                            // Handle f-strings
+                            if (printContent.includes('{') && printContent.includes('}')) {
+                                printContent = printContent.replace(/f["']/, '').replace(/["']$/, '');
+                                
+                                // Replace variables in f-strings
+                                for (let [varName, varValue] of Object.entries(variables)) {
+                                    const regex = new RegExp(`\\{${varName}\\}`, 'g');
+                                    printContent = printContent.replace(regex, varValue);
+                                }
+                            }
+                            
+                            output.push(printContent);
+                        }
+                    }
+                }
+                
+                if (output.length === 0) {
+                    outputContent.textContent = '✓ Kode berhasil dijalankan! (Tidak ada output print)';
+                } else {
+                    outputContent.textContent = output.join('\n');
+                }
+                
+            } catch (error) {
+                outputContent.className = 'output-error';
+                outputContent.textContent = '❌ Error: Terjadi kesalahan saat menjalankan kode. Pastikan syntax Python Anda benar!';
+            }
+        }
+
+        // Demo Section Functions
+        function helloWorld() {
+            const box = document.getElementById('demoBox');
+            box.innerHTML = '<p style="font-size: 2em;">🐍 Hello, World! 🌍</p><p>Ini adalah output dari print("Hello, World!")</p>';
+            box.style.background = '#c6f6d5';
+            box.style.borderColor = '#48bb78';
+        }
+
+        function hitungLuas() {
+            const sisi = Math.floor(Math.random() * 10) + 1;
+            const luas = sisi * sisi;
+            const box = document.getElementById('demoBox');
+            box.innerHTML = `<div><p style="font-size: 1.5em;">📐 Perhitungan Luas Persegi</p><p>Sisi = ${sisi} cm</p><p>Luas = ${sisi} × ${sisi} = <strong>${luas} cm²</strong></p><code style="background: #2d3748; color: #68d391; padding: 10px; border-radius: 5px; display: block; margin-top: 10px;">def luas_persegi(sisi):<br>&nbsp;&nbsp;return sisi * sisi</code></div>`;
+            box.style.background = '#fef5e7';
+            box.style.borderColor = '#ecc94b';
+        }
+
+        function loopAngka() {
+            const box = document.getElementById('demoBox');
+            let output = '<p style="font-size: 1.5em;">🔄 Looping 1-10:</p>';
+            for (let i = 1; i <= 10; i++) {
+                output += `<span style="display: inline-block; margin: 5px; padding: 10px; background: #667eea; color: white; border-radius: 5px; font-weight: bold;">${i}</span>`;
+            }
+            output += '<p style="margin-top: 15px;"><code style="background: #2d3748; color: #68d391; padding: 10px; border-radius: 5px;">for i in range(1, 11):<br>&nbsp;&nbsp;print(i)</code></p>';
+            box.innerHTML = output;
+            box.style.background = '#e9d8fd';
+            box.style.borderColor = '#9f7aea';
+        }
+
+        function acakWarna() {
+            const colors = ['#fbb6ce', '#c6f6d5', '#bee3f8', '#fef5e7', '#e9d8fd'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            const box = document.getElementById('demoBox');
+            box.style.background = randomColor;
+            box.innerHTML = `<div><p style="font-size: 1.5em;">🎨 Warna Acak!</p><p>Background: <strong>${randomColor}</strong></p><code style="background: #2d3748; color: #68d391; padding: 10px; border-radius: 5px; display: block; margin-top: 10px;">import random<br>colors = ['red', 'green', 'blue']<br>random.choice(colors)</code></div>`;
+        }
+
+        function resetDemo() {
+            const box = document.getElementById('demoBox');
+            box.innerHTML = '<p>Klik tombol untuk melihat keajaiban Python! 🐍</p>';
+            box.style.background = '#f7fafc';
+            box.style.borderColor = '#4299e1';
+        }
+
+        // Initialize
+        updateLineNumbers();
+    </script>
+</body>
+</html>
