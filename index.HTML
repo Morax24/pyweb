@@ -3,9 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apa itu Python?</title>
+    <title>Belajar Python - Platform Interaktif</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
     <style>
+        :root {
+            --bg-gradient-start: #667eea;
+            --bg-gradient-end: #764ba2;
+            --card-bg: white;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --code-bg: #1a202c;
+            --code-text: #68d391;
+            --python-blue: #3776ab;
+        }
+
+        .dark-mode {
+            --bg-gradient-start: #1a202c;
+            --bg-gradient-end: #2d3748;
+            --card-bg: #2d3748;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e0;
+            --code-bg: #1a1a1a;
+            --code-text: #68d391;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,10 +36,11 @@
 
         body {
             font-family: 'Courier New', monospace;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
             min-height: 100vh;
             padding: 20px;
-            color: #2d3748;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
         }
 
         .container {
@@ -25,8 +48,92 @@
             margin: 0 auto;
         }
 
+        /* Top Navigation Bar */
+        .top-nav {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 15px 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .top-nav .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--python-blue);
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .theme-toggle, .save-btn, .load-btn, .reset-progress-btn {
+            background: var(--python-blue);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+        }
+
+        .theme-toggle:hover, .save-btn:hover, .load-btn:hover, .reset-progress-btn:hover {
+            background: #2d5d86;
+            transform: translateY(-2px);
+        }
+
+        .progress-bar-container {
+            flex: 1;
+            min-width: 200px;
+            max-width: 300px;
+        }
+
+        .progress-bar-container label {
+            display: block;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+            color: var(--text-secondary);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #48bb78, #38a169);
+            width: 0%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.75em;
+            font-weight: bold;
+        }
+
         .header {
-            background: white;
+            background: var(--card-bg);
             border-radius: 15px;
             padding: 30px;
             margin-bottom: 30px;
@@ -37,7 +144,7 @@
 
         .header h1 {
             font-size: 3em;
-            color: #3776ab;
+            color: var(--python-blue);
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
@@ -45,11 +152,17 @@
         .header .python-icon {
             font-size: 4em;
             margin: 20px 0;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
 
         .header p {
             font-size: 1.2em;
-            color: #4a5568;
+            color: var(--text-secondary);
             line-height: 1.6;
         }
 
@@ -61,12 +174,13 @@
         }
 
         .card {
-            background: white;
+            background: var(--card-bg);
             border-radius: 15px;
             padding: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border-top: 5px solid;
+            position: relative;
         }
 
         .card:hover {
@@ -79,6 +193,24 @@
         .card.yellow { border-top-color: #ecc94b; }
         .card.pink { border-top-color: #ed64a6; }
         .card.purple { border-top-color: #9f7aea; }
+        .card.orange { border-top-color: #f6ad55; }
+
+        .card.completed::after {
+            content: "✓";
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            background: #48bb78;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
 
         .card-icon {
             font-size: 3em;
@@ -88,12 +220,12 @@
         .card h2 {
             font-size: 1.8em;
             margin-bottom: 15px;
-            color: #2d3748;
+            color: var(--text-primary);
         }
 
         .card p {
             line-height: 1.8;
-            color: #4a5568;
+            color: var(--text-secondary);
             margin-bottom: 15px;
         }
 
@@ -106,22 +238,22 @@
             padding: 8px 0;
             padding-left: 25px;
             position: relative;
-            color: #4a5568;
+            color: var(--text-secondary);
         }
 
         .card ul li:before {
             content: "▸";
             position: absolute;
             left: 0;
-            color: #3776ab;
+            color: var(--python-blue);
             font-weight: bold;
         }
 
-        .copy-btn {
+        .copy-btn, .mark-complete-btn {
             position: absolute;
             top: 10px;
             right: 10px;
-            background: #3776ab;
+            background: var(--python-blue);
             color: white;
             border: none;
             padding: 8px 15px;
@@ -137,9 +269,14 @@
             z-index: 10;
         }
 
-        .copy-btn:hover {
+        .mark-complete-btn {
+            right: auto;
+            left: 10px;
+            background: #48bb78;
+        }
+
+        .copy-btn:hover, .mark-complete-btn:hover {
             opacity: 1;
-            background: #2d5d86;
             transform: translateY(-2px);
         }
 
@@ -148,15 +285,15 @@
         }
 
         .code-example {
-            background: #1a202c;
-            color: #68d391;
+            background: var(--code-bg);
+            color: var(--code-text);
             padding: 20px;
             padding-top: 45px;
             border-radius: 10px;
             margin: 15px 0;
             font-family: 'Courier New', monospace;
             overflow-x: auto;
-            border-left: 4px solid #3776ab;
+            border-left: 4px solid var(--python-blue);
             position: relative;
         }
 
@@ -179,76 +316,10 @@
         .function { color: #68d391; }
         .comment { color: #718096; }
 
-        .demo-section {
-            background: white;
-            border-radius: 15px;
-            padding: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .demo-section h2 {
-            font-size: 2em;
-            color: #2d3748;
-            margin-bottom: 20px;
-        }
-
-        .demo-box {
-            background: #f7fafc;
-            border: 3px dashed #4299e1;
-            border-radius: 10px;
-            padding: 30px;
-            margin: 20px 0;
-            min-height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2em;
-            color: #2d3748;
-        }
-
-        .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.1em;
-            border-radius: 50px;
-            cursor: pointer;
-            margin: 10px;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .real-life {
-            background: #edf2f7;
-            border-left: 5px solid #3776ab;
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 5px;
-        }
-
-        .real-life strong {
-            color: #3776ab;
-            font-size: 1.1em;
-        }
-
         .badge {
             display: inline-block;
             padding: 5px 15px;
-            background: #3776ab;
+            background: var(--python-blue);
             color: white;
             border-radius: 20px;
             font-size: 0.9em;
@@ -266,9 +337,26 @@
             white-space: pre-line;
         }
 
-        /* VSCode Style Editor */
+        .real-life {
+            background: #edf2f7;
+            border-left: 5px solid var(--python-blue);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .dark-mode .real-life {
+            background: #1a202c;
+        }
+
+        .real-life strong {
+            color: var(--python-blue);
+            font-size: 1.1em;
+        }
+
+        /* VSCode Editor */
         .vscode-container {
-            background: white;
+            background: var(--card-bg);
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             overflow: hidden;
@@ -297,11 +385,6 @@
             align-items: center;
             gap: 8px;
             font-size: 0.9em;
-        }
-
-        .vscode-tab.active {
-            background: #1e1e1e;
-            color: white;
         }
 
         .vscode-controls {
@@ -348,11 +431,6 @@
         .sidebar-icon:hover {
             color: white;
             background: #37373d;
-        }
-
-        .sidebar-icon.active {
-            color: white;
-            border-left: 2px solid #007acc;
         }
 
         .vscode-content {
@@ -405,12 +483,6 @@
             font-size: 0.85em;
         }
 
-        .footer-section {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
         .run-button {
             background: #48bb78;
             color: white;
@@ -432,11 +504,12 @@
         .run-button:hover {
             background: #38a169;
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(72, 187, 120, 0.4);
         }
 
-        .run-button:active {
-            transform: translateY(0);
+        .run-button:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .output-panel {
@@ -461,14 +534,16 @@
 
         .output-panel .output-content {
             color: #68d391;
+            white-space: pre-wrap;
         }
 
         .output-panel .output-error {
             color: #f56565;
+            white-space: pre-wrap;
         }
 
         .examples-section {
-            background: white;
+            background: var(--card-bg);
             border-radius: 15px;
             padding: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
@@ -476,7 +551,7 @@
         }
 
         .examples-section h3 {
-            color: #2d3748;
+            color: var(--text-primary);
             margin-bottom: 20px;
             font-size: 1.5em;
             text-align: center;
@@ -505,7 +580,155 @@
         .example-btn:hover {
             background: #5568d3;
             transform: translateY(-2px);
-            box-shadow: 0 5px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Quiz Section */
+        .quiz-container {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            margin-bottom: 30px;
+        }
+
+        .quiz-container h3 {
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            text-align: center;
+        }
+
+        .quiz-question {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--python-blue);
+        }
+
+        .dark-mode .quiz-question {
+            background: #1a202c;
+        }
+
+        .quiz-question h4 {
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .quiz-option {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--python-blue);
+            transform: translateX(5px);
+        }
+
+        .quiz-option.correct {
+            background: #c6f6d5;
+            border-color: #48bb78;
+        }
+
+        .quiz-option.wrong {
+            background: #fed7d7;
+            border-color: #f56565;
+        }
+
+        .quiz-result {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .quiz-result.show {
+            display: block;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 10px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .demo-section {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .demo-section h2 {
+            font-size: 2em;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+        }
+
+        .demo-box {
+            background: #f7fafc;
+            border: 3px dashed #4299e1;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            color: var(--text-primary);
+        }
+
+        .dark-mode .demo-box {
+            background: #1a202c;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         @media (max-width: 768px) {
@@ -517,18 +740,51 @@
                 grid-template-columns: 1fr;
             }
 
-            .vscode-sidebar {
-                width: 40px;
+            .top-nav {
+                flex-direction: column;
             }
 
-            .code-editor {
-                font-size: 12px;
+            .nav-controls {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Top Navigation -->
+        <div class="top-nav">
+            <div class="logo">
+                <span>🐍</span>
+                <span>Python Learning</span>
+            </div>
+            <div class="progress-bar-container">
+                <label>Progress Belajar:</label>
+                <div class="progress-bar">
+                    <div class="progress-bar-fill" id="progressFill">0%</div>
+                </div>
+            </div>
+            <div class="nav-controls">
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <i class="fas fa-moon"></i>
+                    <span id="themeText">Dark Mode</span>
+                </button>
+                <button class="save-btn" onclick="saveCode()">
+                    <i class="fas fa-save"></i>
+                    Save
+                </button>
+                <button class="load-btn" onclick="loadCode()">
+                    <i class="fas fa-folder-open"></i>
+                    Load
+                </button>
+                <button class="reset-progress-btn" onclick="resetProgress()">
+                    <i class="fas fa-redo"></i>
+                    Reset
+                </button>
+            </div>
+        </div>
+
         <div class="header">
             <div class="python-icon">🐍</div>
             <h1>Apa itu Python?</h1>
@@ -537,14 +793,15 @@
                 <span class="badge">Mudah Dipelajari</span>
                 <span class="badge">Powerful</span>
                 <span class="badge">Serbaguna</span>
+                <span class="badge">Real Python Execution</span>
             </div>
         </div>
 
-        <!-- VSCode Editor - Praktek Langsung! -->
+        <!-- VSCode Editor -->
         <div class="vscode-container">
             <div class="vscode-header">
                 <div class="vscode-tabs">
-                    <div class="vscode-tab active">
+                    <div class="vscode-tab">
                         <i class="fab fa-python"></i>
                         main.py
                     </div>
@@ -558,11 +815,11 @@
 
             <div class="vscode-body">
                 <div class="vscode-sidebar">
-                    <i class="fas fa-copy sidebar-icon active" title="Explorer"></i>
-                    <i class="fas fa-search sidebar-icon" title="Search"></i>
-                    <i class="fas fa-code-branch sidebar-icon" title="Source Control"></i>
-                    <i class="fas fa-play sidebar-icon" title="Run"></i>
-                    <i class="fas fa-cube sidebar-icon" title="Extensions"></i>
+                    <i class="fas fa-copy sidebar-icon"></i>
+                    <i class="fas fa-search sidebar-icon"></i>
+                    <i class="fas fa-code-branch sidebar-icon"></i>
+                    <i class="fas fa-play sidebar-icon"></i>
+                    <i class="fas fa-cube sidebar-icon"></i>
                 </div>
 
                 <div class="vscode-content">
@@ -576,7 +833,7 @@ print("Hello, Python!")</textarea>
 
             <div class="vscode-footer">
                 <div class="footer-section">
-                    <span><i class="fab fa-python"></i> Python 3.12</span>
+                    <span><i class="fab fa-python"></i> Python 3.11 (Pyodide)</span>
                     <span><i class="fas fa-check-circle"></i> UTF-8</span>
                 </div>
                 <div class="footer-section">
@@ -585,13 +842,17 @@ print("Hello, Python!")</textarea>
             </div>
 
             <div style="text-align: center; background: #252526; padding: 10px;">
-                <button class="run-button" onclick="runCode()">
+                <button class="run-button" onclick="runPythonCode()" id="runBtn">
                     <i class="fas fa-play"></i>
-                    Jalankan Kode (Run)
+                    Jalankan Kode (Real Python!)
                 </button>
+                <div id="loadingPyodide" style="color: white; padding: 10px; display: none;">
+                    <div class="loading"></div>
+                    <span style="margin-left: 10px;">Memuat Python engine...</span>
+                </div>
             </div>
 
-            <div class="output-panel" id="outputPanel">
+            <div class="output-panel">
                 <div class="output-header">
                     <i class="fas fa-terminal"></i> OUTPUT:
                 </div>
@@ -603,7 +864,7 @@ print("Hello, Python!")</textarea>
 
         <!-- Examples Section -->
         <div class="examples-section">
-            <h3><i class="fas fa-lightbulb"></i> Contoh Kode Python - Klik untuk Coba Langsung!</h3>
+            <h3><i class="fas fa-lightbulb"></i> Contoh Kode Python - Klik untuk Coba!</h3>
             <div class="example-buttons">
                 <button class="example-btn" onclick="loadExample('hello')">👋 Hello World</button>
                 <button class="example-btn" onclick="loadExample('variable')">📝 Variabel</button>
@@ -612,12 +873,54 @@ print("Hello, Python!")</textarea>
                 <button class="example-btn" onclick="loadExample('conditional')">❓ If-Else</button>
                 <button class="example-btn" onclick="loadExample('list')">📚 List</button>
                 <button class="example-btn" onclick="loadExample('calculator')">🧮 Kalkulator</button>
-                <button class="example-btn" onclick="loadExample('faktorial')">🔢 Faktorial</button>
+                <button class="example-btn" onclick="loadExample('oop')">🎯 OOP (Baru!)</button>
+                <button class="example-btn" onclick="loadExample('fibonacci')">🔢 Fibonacci</button>
             </div>
         </div>
 
+        <!-- Quiz Section -->
+        <div class="quiz-container">
+            <h3><i class="fas fa-brain"></i> Quiz Python - Test Pengetahuanmu!</h3>
+            
+            <div class="quiz-question" id="q1">
+                <h4>1. Apa output dari kode ini?<br><code>print(5 + 3 * 2)</code></h4>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="checkAnswer(1, this, false)">A. 16</div>
+                    <div class="quiz-option" onclick="checkAnswer(1, this, true)">B. 11</div>
+                    <div class="quiz-option" onclick="checkAnswer(1, this, false)">C. 10</div>
+                    <div class="quiz-option" onclick="checkAnswer(1, this, false)">D. Error</div>
+                </div>
+            </div>
+
+            <div class="quiz-question" id="q2">
+                <h4>2. Manakah cara yang benar untuk membuat function di Python?</h4>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="checkAnswer(2, this, false)">A. function myFunc():</div>
+                    <div class="quiz-option" onclick="checkAnswer(2, this, true)">B. def myFunc():</div>
+                    <div class="quiz-option" onclick="checkAnswer(2, this, false)">C. func myFunc():</div>
+                    <div class="quiz-option" onclick="checkAnswer(2, this, false)">D. create myFunc():</div>
+                </div>
+            </div>
+
+            <div class="quiz-question" id="q3">
+                <h4>3. Tipe data apa yang dihasilkan oleh: <code>type([1, 2, 3])</code>?</h4>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="checkAnswer(3, this, false)">A. tuple</div>
+                    <div class="quiz-option" onclick="checkAnswer(3, this, true)">B. list</div>
+                    <div class="quiz-option" onclick="checkAnswer(3, this, false)">C. array</div>
+                    <div class="quiz-option" onclick="checkAnswer(3, this, false)">D. set</div>
+                </div>
+            </div>
+
+            <div class="quiz-result" id="quizResult" style="display: none;"></div>
+        </div>
+
+        <!-- Content Cards -->
         <div class="content-grid">
-            <div class="card blue">
+            <div class="card blue" data-card="intro">
+                <button class="mark-complete-btn" onclick="markComplete('intro')">
+                    <i class="fas fa-check"></i>
+                </button>
                 <div class="card-icon">📖</div>
                 <h2>Apa itu Python?</h2>
                 <p><strong>Python</strong> adalah bahasa pemrograman interpreted, high-level, dan general-purpose yang menekankan pada keterbacaan kode.</p>
@@ -628,7 +931,10 @@ print("Hello, Python!")</textarea>
                 </div>
             </div>
 
-            <div class="card green">
+            <div class="card green" data-card="usage">
+                <button class="mark-complete-btn" onclick="markComplete('usage')">
+                    <i class="fas fa-check"></i>
+                </button>
                 <div class="card-icon">🎯</div>
                 <h2>Kegunaan Python</h2>
                 <ul>
@@ -645,7 +951,10 @@ print("Hello, Python!")</textarea>
                 </div>
             </div>
 
-            <div class="card yellow">
+            <div class="card yellow" data-card="why">
+                <button class="mark-complete-btn" onclick="markComplete('why')">
+                    <i class="fas fa-check"></i>
+                </button>
                 <div class="card-icon">⚡</div>
                 <h2>Kenapa Python?</h2>
                 <ul>
@@ -664,7 +973,10 @@ print("Hello, Python!")</textarea>
         </div>
 
         <div class="content-grid">
-            <div class="card pink">
+            <div class="card pink" data-card="hello">
+                <button class="mark-complete-btn" onclick="markComplete('hello')">
+                    <i class="fas fa-check"></i>
+                </button>
                 <div class="card-icon">👋</div>
                 <h2>Contoh: Hello World</h2>
                 <p>Program pertama yang biasa dibuat oleh programmer:</p>
@@ -679,7 +991,10 @@ print("Hello, Python!")</textarea>
                 <p>Sangat simpel! Bandingkan dengan Java yang memerlukan banyak baris kode untuk hal yang sama.</p>
             </div>
 
-            <div class="card purple">
+            <div class="card purple" data-card="variable">
+                <button class="mark-complete-btn" onclick="markComplete('variable')">
+                    <i class="fas fa-check"></i>
+                </button>
                 <div class="card-icon">🔢</div>
                 <h2>Contoh: Variabel & Tipe Data</h2>
                 <div class="code-example">
@@ -702,7 +1017,10 @@ Umur: 19 tahun
 Tinggi: 170.5 cm</div>
             </div>
 
-            <div class="card blue">
+            <div class="card blue" data-card="loop">
+                <button class="mark-complete-btn" onclick="markComplete('loop')">
+                    <i class="fas fa-check"></i>
+                </button>
                 <div class="card-icon">🔄</div>
                 <h2>Contoh: Looping</h2>
                 <div class="code-example">
@@ -729,7 +1047,10 @@ Saya suka Pisang
 Saya suka Jeruk</div>
             </div>
 
-            <div class="card green">
+            <div class="card green" data-card="function">
+                <button class="mark-complete-btn" onclick="markComplete('function')">
+                    <i class="fas fa-check"></i>
+                </button>
                 <div class="card-icon">🎲</div>
                 <h2>Contoh: Function</h2>
                 <div class="code-example">
@@ -756,7 +1077,10 @@ Halo, Namamu!
 Luas: 25</div>
             </div>
 
-            <div class="card yellow">
+            <div class="card yellow" data-card="conditional">
+                <button class="mark-complete-btn" onclick="markComplete('conditional')">
+                    <i class="fas fa-check"></i>
+                </button>
                 <div class="card-icon">❓</div>
                 <h2>Contoh: Conditional (If-Else)</h2>
                 <div class="code-example">
@@ -778,7 +1102,10 @@ nilai = <span class="string">85</span>
                 <div class="output">Output: Grade: B</div>
             </div>
 
-            <div class="card pink">
+            <div class="card pink" data-card="list">
+                <button class="mark-complete-btn" onclick="markComplete('list')">
+                    <i class="fas fa-check"></i>
+                </button>
                 <div class="card-icon">📚</div>
                 <h2>Contoh: List & Dictionary</h2>
                 <div class="code-example">
@@ -787,7 +1114,7 @@ nilai = <span class="string">85</span>
                     </button>
 <code><span class="comment"># List (Array)</span>
 skills = [<span class="string">"HTML"</span>, <span class="string">"CSS"</span>, <span class="string">"JavaScript"</span>, <span class="string">"Python"</span>]
-<span class="keyword">print</span>(skills[<span class="string">0</span>])  <span class="comment"># Output: HTML</span>
+<span class="keyword">print</span>(skills[<span class="string">0</span>])
 
 <span class="comment"># Dictionary (Key-Value)</span>
 siswa = {
@@ -801,8 +1128,39 @@ siswa = {
 HTML
 Namamu</div>
             </div>
+
+            <div class="card orange" data-card="oop">
+                <button class="mark-complete-btn" onclick="markComplete('oop')">
+                    <i class="fas fa-check"></i>
+                </button>
+                <div class="card-icon">🎯</div>
+                <h2>Contoh: OOP (Object-Oriented Programming)</h2>
+                <div class="code-example">
+                    <button class="copy-btn" onclick="copyToEditor('oop')">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+<code><span class="comment"># Membuat Class</span>
+<span class="keyword">class</span> <span class="function">Mobil</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, merk, warna):
+        <span class="keyword">self</span>.merk = merk
+        <span class="keyword">self</span>.warna = warna
+    
+    <span class="keyword">def</span> <span class="function">info</span>(<span class="keyword">self</span>):
+        <span class="keyword">return</span> <span class="string">f"Mobil {self.merk} warna {self.warna}"</span>
+
+<span class="comment"># Membuat objek</span>
+mobil1 = <span class="function">Mobil</span>(<span class="string">"Toyota"</span>, <span class="string">"Merah"</span>)
+<span class="keyword">print</span>(mobil1.<span class="function">info</span>())</code>
+                </div>
+                <div class="output">Output: Mobil Toyota warna Merah</div>
+                <div class="real-life">
+                    <strong>🌍 Contoh Nyata:</strong>
+                    <p>OOP digunakan di Instagram untuk membuat sistem User, Post, Comment. Setiap user adalah objek dengan properties (nama, foto) dan methods (post, like, follow).</p>
+                </div>
+            </div>
         </div>
 
+        <!-- Demo Section -->
         <div class="demo-section">
             <h2>🎯 Demo Interaktif Python</h2>
             <p>Klik tombol di bawah untuk melihat Python beraksi!</p>
@@ -822,7 +1180,7 @@ Namamu</div>
             <div class="card-icon">🚀</div>
             <h2>Mulai Belajar Python!</h2>
             <p>Python adalah bahasa yang sempurna untuk memulai perjalanan programming Anda. Dengan sintaks yang mudah dan aplikasi yang luas, Python membuka pintu ke berbagai bidang teknologi!</p>
-            <p style="margin-top: 20px; font-size: 1.2em; color: #3776ab;">
+            <p style="margin-top: 20px; font-size: 1.2em; color: var(--python-blue);">
                 <strong>"Python is powerful... and fast; plays well with others; runs everywhere; is friendly & easy to learn; is Open."</strong>
             </p>
             <p style="margin-top: 10px;">- Python.org</p>
@@ -830,7 +1188,12 @@ Namamu</div>
     </div>
 
     <script>
-        // Code snippets untuk copy
+        // Global variables
+        let pyodide = null;
+        let completedCards = new Set();
+        let correctAnswers = 0;
+
+        // Code snippets
         const codeSnippets = {
             hello_world: `# Program Hello World di Python
 print("Hello, World!")`,
@@ -883,7 +1246,7 @@ else:
 
             list: `# List (Array)
 skills = ["HTML", "CSS", "JavaScript", "Python"]
-print(skills[0])  # Output: HTML
+print(skills[0])
 
 # Dictionary (Key-Value)
 siswa = {
@@ -891,10 +1254,22 @@ siswa = {
     "kelas": "12",
     "sekolah": "SMKN"
 }
-print(siswa["nama"])`
+print(siswa["nama"])`,
+
+            oop: `# Membuat Class
+class Mobil:
+    def __init__(self, merk, warna):
+        self.merk = merk
+        self.warna = warna
+    
+    def info(self):
+        return f"Mobil {self.merk} warna {self.warna}"
+
+# Membuat objek
+mobil1 = Mobil("Toyota", "Merah")
+print(mobil1.info())`
         };
 
-        // VSCode Editor Functions
         const examples = {
             hello: `# Program Hello World
 print("Hello, World!")
@@ -998,49 +1373,133 @@ print(f"10 - 5 = {kalkulator(10, 5, '-')}")
 print(f"10 * 5 = {kalkulator(10, 5, '*')}")
 print(f"10 / 5 = {kalkulator(10, 5, '/')}")`,
 
-            faktorial: `# Menghitung Faktorial
-def faktorial(n):
-    if n == 0 or n == 1:
-        return 1
-    else:
-        return n * faktorial(n - 1)
+            oop: `# Object-Oriented Programming
+class Siswa:
+    def __init__(self, nama, kelas):
+        self.nama = nama
+        self.kelas = kelas
+        self.nilai = []
+    
+    def tambah_nilai(self, nilai):
+        self.nilai.append(nilai)
+    
+    def rata_rata(self):
+        if len(self.nilai) > 0:
+            return sum(self.nilai) / len(self.nilai)
+        return 0
+    
+    def info(self):
+        return f"{self.nama} - Kelas {self.kelas}"
 
-print("=== FAKTORIAL ===")
-for i in range(1, 6):
-    hasil = faktorial(i)
-    print(f"{i}! = {hasil}")
+# Membuat objek siswa
+siswa1 = Siswa("Budi", "12 RPL")
+siswa1.tambah_nilai(85)
+siswa1.tambah_nilai(90)
+siswa1.tambah_nilai(88)
 
-# Contoh lain
-angka = 7
-print(f"\\n{angka}! = {faktorial(angka)}")`
+print(siswa1.info())
+print(f"Rata-rata nilai: {siswa1.rata_rata():.2f}")`,
+
+            fibonacci: `# Fibonacci Sequence
+def fibonacci(n):
+    if n <= 0:
+        return []
+    elif n == 1:
+        return [0]
+    elif n == 2:
+        return [0, 1]
+    
+    fib = [0, 1]
+    for i in range(2, n):
+        fib.append(fib[i-1] + fib[i-2])
+    return fib
+
+# Generate 10 angka Fibonacci
+print("=== FIBONACCI SEQUENCE ===")
+hasil = fibonacci(10)
+print(f"10 angka pertama: {hasil}")
+print(f"Angka ke-10: {hasil[-1]}")`
         };
 
-        // Function untuk copy ke editor
+        // Initialize Pyodide
+        async function initPyodide() {
+            if (pyodide) return;
+            
+            document.getElementById('loadingPyodide').style.display = 'block';
+            document.getElementById('runBtn').disabled = true;
+            
+            try {
+                pyodide = await loadPyodide();
+                document.getElementById('loadingPyodide').style.display = 'none';
+                document.getElementById('runBtn').disabled = false;
+                console.log("Pyodide loaded successfully!");
+            } catch (error) {
+                document.getElementById('outputContent').className = 'output-error';
+                document.getElementById('outputContent').textContent = 'Error loading Python engine. Please refresh the page.';
+                console.error("Error loading Pyodide:", error);
+            }
+        }
+
+        // Run Python code with Pyodide
+        async function runPythonCode() {
+            if (!pyodide) {
+                await initPyodide();
+            }
+            
+            const code = document.getElementById('codeEditor').value;
+            const outputContent = document.getElementById('outputContent');
+            
+            outputContent.className = 'output-content';
+            outputContent.textContent = 'Running...';
+            
+            try {
+                // Redirect stdout
+                await pyodide.runPythonAsync(`
+import sys
+from io import StringIO
+sys.stdout = StringIO()
+                `);
+                
+                // Run user code
+                await pyodide.runPythonAsync(code);
+                
+                // Get output
+                const output = await pyodide.runPythonAsync('sys.stdout.getvalue()');
+                
+                if (output) {
+                    outputContent.textContent = output;
+                } else {
+                    outputContent.textContent = '✓ Kode berhasil dijalankan! (Tidak ada output)';
+                }
+            } catch (error) {
+                outputContent.className = 'output-error';
+                outputContent.textContent = `❌ Error:\n${error.message}`;
+            }
+        }
+
+        // Copy code to editor
         function copyToEditor(snippetName) {
             const code = codeSnippets[snippetName];
             const editor = document.getElementById('codeEditor');
             const button = event.target.closest('.copy-btn');
             
-            // Paste ke editor
             editor.value = code;
             updateLineNumbers();
             
-            // Update button appearance
             const originalHTML = button.innerHTML;
             button.innerHTML = '<i class="fas fa-check"></i> Copied!';
             button.classList.add('copied');
             
-            // Scroll ke editor
             editor.scrollIntoView({ behavior: 'smooth', block: 'center' });
             editor.focus();
             
-            // Reset button after 2 seconds
             setTimeout(() => {
                 button.innerHTML = originalHTML;
                 button.classList.remove('copied');
             }, 2000);
         }
 
+        // Load example
         function loadExample(exampleName) {
             const editor = document.getElementById('codeEditor');
             editor.value = examples[exampleName];
@@ -1048,11 +1507,10 @@ print(f"\\n{angka}! = {faktorial(angka)}")`
             document.getElementById('outputContent').textContent = 'Klik tombol "Jalankan Kode" untuk melihat hasil...';
             document.getElementById('outputContent').className = 'output-content';
             editor.focus();
-            
-            // Scroll ke editor
             editor.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
+        // Update line numbers
         function updateLineNumbers() {
             const editor = document.getElementById('codeEditor');
             const lineNumbers = document.getElementById('lineNumbers');
@@ -1065,87 +1523,157 @@ print(f"\\n{angka}! = {faktorial(angka)}")`
             document.getElementById('lineNumbers').scrollTop = this.scrollTop;
         });
 
-        function runCode() {
+        // Theme toggle
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            document.getElementById('themeText').textContent = isDark ? 'Light Mode' : 'Dark Mode';
+            document.querySelector('.theme-toggle i').className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        // Save code
+        function saveCode() {
             const code = document.getElementById('codeEditor').value;
-            const outputContent = document.getElementById('outputContent');
-            
-            outputContent.innerHTML = '';
-            outputContent.className = 'output-content';
-            
-            try {
-                const lines = code.split('\n');
-                let output = [];
-                let variables = {};
-                
-                // Simple Python interpreter simulation
-                for (let line of lines) {
-                    line = line.trim();
-                    
-                    // Skip comments and empty lines
-                    if (line.startsWith('#') || line === '') {
-                        continue;
-                    }
-                    
-                    // Handle variable assignments
-                    if (line.includes('=') && !line.includes('==') && !line.includes('>=') && !line.includes('<=')) {
-                        const parts = line.split('=');
-                        if (parts.length === 2 && !line.startsWith('print')) {
-                            const varName = parts[0].trim();
-                            let varValue = parts[1].trim();
-                            
-                            // Remove quotes from strings
-                            if ((varValue.startsWith('"') && varValue.endsWith('"')) || 
-                                (varValue.startsWith("'") && varValue.endsWith("'"))) {
-                                varValue = varValue.slice(1, -1);
-                            }
-                            
-                            variables[varName] = varValue;
-                            continue;
-                        }
-                    }
-                    
-                    // Handle print statements
-                    if (line.startsWith('print(')) {
-                        let content = line.match(/print\((.*)\)/);
-                        if (content && content[1]) {
-                            let printContent = content[1];
-                            
-                            // Remove quotes
-                            printContent = printContent.replace(/^["']|["']$/g, '');
-                            
-                            // Handle escape sequences
-                            printContent = printContent.replace(/\\n/g, '\n');
-                            printContent = printContent.replace(/\\t/g, '\t');
-                            
-                            // Handle f-strings
-                            if (printContent.includes('{') && printContent.includes('}')) {
-                                printContent = printContent.replace(/f["']/, '').replace(/["']$/, '');
-                                
-                                // Replace variables in f-strings
-                                for (let [varName, varValue] of Object.entries(variables)) {
-                                    const regex = new RegExp(`\\{${varName}\\}`, 'g');
-                                    printContent = printContent.replace(regex, varValue);
-                                }
-                            }
-                            
-                            output.push(printContent);
-                        }
-                    }
-                }
-                
-                if (output.length === 0) {
-                    outputContent.textContent = '✓ Kode berhasil dijalankan! (Tidak ada output print)';
-                } else {
-                    outputContent.textContent = output.join('\n');
-                }
-                
-            } catch (error) {
-                outputContent.className = 'output-error';
-                outputContent.textContent = '❌ Error: Terjadi kesalahan saat menjalankan kode. Pastikan syntax Python Anda benar!';
+            localStorage.setItem('savedCode', code);
+            alert('✓ Kode berhasil disimpan!');
+        }
+
+        // Load code
+        function loadCode() {
+            const savedCode = localStorage.getItem('savedCode');
+            if (savedCode) {
+                document.getElementById('codeEditor').value = savedCode;
+                updateLineNumbers();
+                alert('✓ Kode berhasil dimuat!');
+            } else {
+                alert('⚠ Tidak ada kode yang tersimpan!');
             }
         }
 
-        // Demo Section Functions
+        // Mark card as complete
+        function markComplete(cardId) {
+            const card = document.querySelector(`[data-card="${cardId}"]`);
+            
+            if (completedCards.has(cardId)) {
+                completedCards.delete(cardId);
+                card.classList.remove('completed');
+            } else {
+                completedCards.add(cardId);
+                card.classList.add('completed');
+            }
+            
+            updateProgress();
+            saveProgress();
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const totalCards = document.querySelectorAll('[data-card]').length;
+            const completed = completedCards.size;
+            const percentage = Math.round((completed / totalCards) * 100);
+            
+            const progressFill = document.getElementById('progressFill');
+            progressFill.style.width = percentage + '%';
+            progressFill.textContent = percentage + '%';
+        }
+
+        // Save progress
+        function saveProgress() {
+            localStorage.setItem('completedCards', JSON.stringify([...completedCards]));
+        }
+
+        // Load progress
+        function loadProgress() {
+            const saved = localStorage.getItem('completedCards');
+            if (saved) {
+                completedCards = new Set(JSON.parse(saved));
+                completedCards.forEach(cardId => {
+                    const card = document.querySelector(`[data-card="${cardId}"]`);
+                    if (card) card.classList.add('completed');
+                });
+                updateProgress();
+            }
+        }
+
+        // Reset progress
+        function resetProgress() {
+            if (confirm('Apakah Anda yakin ingin mereset semua progress?')) {
+                completedCards.clear();
+                document.querySelectorAll('[data-card]').forEach(card => {
+                    card.classList.remove('completed');
+                });
+                updateProgress();
+                saveProgress();
+                correctAnswers = 0;
+                document.querySelectorAll('.quiz-option').forEach(opt => {
+                    opt.classList.remove('correct', 'wrong');
+                });
+                document.getElementById('quizResult').style.display = 'none';
+                alert('✓ Progress berhasil direset!');
+            }
+        }
+
+        // Check quiz answer
+        function checkAnswer(questionNum, element, isCorrect) {
+            const options = element.parentElement.children;
+            
+            // Disable all options in this question
+            for (let opt of options) {
+                opt.style.pointerEvents = 'none';
+            }
+            
+            if (isCorrect) {
+                element.classList.add('correct');
+                correctAnswers++;
+            } else {
+                element.classList.add('wrong');
+                // Show correct answer
+                for (let opt of options) {
+                    if (opt.onclick.toString().includes('true')) {
+                        opt.classList.add('correct');
+                    }
+                }
+            }
+            
+            // Check if all questions answered
+            const totalQuestions = 3;
+            const answeredQuestions = document.querySelectorAll('.quiz-option.correct, .quiz-option.wrong').length / 4; // 4 options per question
+            
+            if (answeredQuestions === totalQuestions) {
+                showQuizResult();
+            }
+        }
+
+        // Show quiz result
+        function showQuizResult() {
+            const result = document.getElementById('quizResult');
+            const totalQuestions = 3;
+            const percentage = Math.round((correctAnswers / totalQuestions) * 100);
+            
+            let message = '';
+            let bgColor = '';
+            
+            if (percentage === 100) {
+                message = '🎉 Perfect! Anda menguasai dasar Python!';
+                bgColor = '#c6f6d5';
+            } else if (percentage >= 66) {
+                message = '👍 Bagus! Anda sudah paham Python!';
+                bgColor = '#bee3f8';
+            } else if (percentage >= 33) {
+                message = '📚 Lumayan! Terus belajar ya!';
+                bgColor = '#fef5e7';
+            } else {
+                message = '💪 Semangat! Coba pelajari lagi materinya!';
+                bgColor = '#fed7d7';
+            }
+            
+            result.textContent = `${message}\nSkor: ${correctAnswers}/${totalQuestions} (${percentage}%)`;
+            result.style.background = bgColor;
+            result.style.display = 'block';
+        }
+
+        // Demo functions
         function helloWorld() {
             const box = document.getElementById('demoBox');
             box.innerHTML = '<p style="font-size: 2em;">🐍 Hello, World! 🌍</p><p>Ini adalah output dari print("Hello, World!")</p>';
@@ -1189,8 +1717,24 @@ print(f"\\n{angka}! = {faktorial(angka)}")`
             box.style.borderColor = '#4299e1';
         }
 
-        // Initialize
-        updateLineNumbers();
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            updateLineNumbers();
+            
+            // Load saved theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('themeText').textContent = 'Light Mode';
+                document.querySelector('.theme-toggle i').className = 'fas fa-sun';
+            }
+            
+            // Load progress
+            loadProgress();
+            
+            // Initialize Pyodide in background
+            setTimeout(initPyodide, 1000);
+        });
     </script>
 </body>
 </html>
